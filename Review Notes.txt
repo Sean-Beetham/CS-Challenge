@@ -1,0 +1,76 @@
+Review Notes:
+
+ConsolePrinter.cs:
+	line 21: It's not a good idea to override the ToString function to return a null.
+	
+Suggestions for Restructuring:
+	This class seems to be unnecessary in it's current form, It seems to be a round about way to do output. My suggestion is that
+	we restructure this to be our UI class, it will handle all of our interaction with the end user (Input and Output). I have renamed
+	it to UserInterface and have made it a static class to handle various calls that functions might need to display information to
+	the end user. In future projects, we can reuse this class to save development time.
+	
+Program.cs:
+	line 16: Look at the comments for this file, I think it is better if we restructure this class.
+	line 20: We should display to the user what the options are, if the user presses something other than ? the program exits
+	line 27: I personally believe that we should handle input by reading lines from the console rather than single characters.
+	line 28/33: We can do this in a switch statement as it will never hit both of these options at the same time.
+	line 42/51: We are repeating lines of code here, we can either handle this in a funciton or after we resolve the category choice
+	line 62: We can remove this function with the restructuring of the ConsolePrinter class.
+	line 67: We can remove this function with the restructuring of the ConsolePrinter class.
+	Lines 110-122: These functions will need to be refactored to work on the restructuring of JsonFeed class.
+
+Suggestions for Restructuring:
+	We will keep the main functionality of this file intact, but we can change up how we go about it. In Main, we can use a switch statement
+	with all of the possible choices for the end users. The options will be displayed to the end user automatically. When a selection is made 
+	the switch statement will launch a function that handles all of the input and output for that specified option. 
+	
+	
+	
+
+JsonFeed.cs:
+Intial File Analysis:
+	line 15: _url should not be a static member, Since even within this program currently we use multiple different websites,
+	we don't want to affect other possible copies of JsonFeed
+	line 15: We don't want to provide an empty constructor as this could cause errors later by _url not being set
+	line 16: "int results" is not needed as it is never used.
+	Line 21/line 53/line 61: It doesn't make sense to have these functions as static functions since we are changing the _url to not
+	be static. We will be accessing this using an instantiated copy of JsonFeed.
+	line 26: We should also check for blank category otherwise we can end up throwing an error.
+	line 28: url will never contain a ? since you set its value on line 25, we can just add the ?, we can also combine line 31 and 32 onto
+	one single line
+	Line 37: we should check for blank name as well.
+	line 41: "Chuck Norris".length is a static value, we can store this value somewhere and just access it instead of accessing it like that.
+	Line 45: Do we need to return the joke as a string array? We can just return it as a string.
+	Line 51: <param> doesn't represented what is actually being passed to the device (in this case nothing)
+	line 52: Comment should explain what the function returns.
+	line 57: We should wait for an async function before continuing on.
+	line 66: Request is malformed, should be "jokes/categories"
+	
+	
+	
+Suggestions for Restructuring:
+	Rewrite class suggestion: In JsonFeed, we had 3 functions that do different but similar things. In each of the paths through this class,
+	we do the following: Create a HttpClient pointing to a base URL, create a request (in different forms), and execute the request for a JSON
+	string. In the functions GetRandomJokes(), Getnames() (which should have a capitalized the N to follow style) and GetCategories(), we set up
+	the _request and deal with the resulting file.
+	If we look to expand this program, there will be some functionality that is copied (since it is common to all requests), as well as the file
+	would become quite unruly quickly if you needed a specific function for every request. We can abstract out the functionality of executing the
+	act of setting up the HttpClient and executing the GET and retrieving the data from the website.
+	This abstract class will be the base for interacting with the various sites, the preparing of the request will be done in classes that inherit
+	JsonFeed.
+	
+ChuckNorrisJokeFeed.cs:
+	This file handles all requests to the website: "https://api.chucknorris.io". This includes retrieving a random joke and 
+	retrieving a list of categories
+	Methods:
+		GetRandomJokes(): Set up the request for retrieving a random joke, apply a category if provided, replace the name if provided
+		GetCategories(): Retrieve the available categories for selecting from on the site.
+		
+NameFeed.cs:
+	This file handles all requests to the website: "http://uinames.com/api/"
+	Methods:
+		GetName(): Retrieve a random name
+		GetTestData(): Generate a random name in the expected json format (site was down when I did this).
+
+		
+
