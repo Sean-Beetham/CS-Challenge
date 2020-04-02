@@ -22,7 +22,8 @@ Program.cs:
 Suggestions for Restructuring:
 	We will keep the main functionality of this file intact, but we can change up how we go about it. In Main, we can use a switch statement
 	with all of the possible choices for the end users. The options will be displayed to the end user automatically. When a selection is made 
-	the switch statement will launch a function that handles all of the input and output for that specified option. 
+	the switch statement will launch a function that handles all of the input and output for that specified option. Keeping each feature contained
+	to one function (which may be accessed in another function), allows us to have an easier time to debug and add new features.
 	
 	
 	
